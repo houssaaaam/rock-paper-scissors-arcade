@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors Spock Lizard | Ultimate Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Standardized baseline audio layout properties -->
+    <audio id="interstellar-audio" loop preload="auto">
+        <source src="interstellar.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="game-container theme-classic" id="main-container">
+        <div class="particle-stage-overlay" id="particle-stage"></div>
+
+        <div class="timer-progress-wrapper" id="timer-wrapper" style="display: none;">
+            <div class="timer-progress-bar" id="timer-bar"></div>
+        </div>
+
+        <div class="header-controls">
+            <button id="theme-toggle-btn" class="control-badge-btn" title="Cycle Visual Theme">🎨 Theme</button>
+            <button id="blitz-toggle-btn" class="control-badge-btn" title="Toggle 3s Blitz Speed-Run">⏱️ Blitz: OFF</button>
+            <button id="lang-toggle-btn" class="control-badge-btn" title="Switch Language">🌐 EN</button>
+            <button id="audio-toggle-btn" class="control-badge-btn" title="Toggle Audio Module">🔇</button>
+        </div>
+        
+        <div class="profile-header">
+            <div class="avatar-wrapper" id="avatar-btn" title="Click to change avatar">
+                <span id="profile-avatar">🎮</span>
+                <div class="avatar-edit-hint">🔄</div>
+            </div>
+            <div class="profile-text-zone">
+                <div class="welcome-row">
+                    <span class="greeting-prefix" id="txt-welcome">Welcome,</span>
+                    <div class="name-edit-container">
+                        <input type="text" id="global-profile-name" value="Player" maxlength="12" title="Click to edit profile name" autocomplete="off">
+                        <span class="edit-pencil-icon">✏️</span>
+                    </div>
+                </div>
+                <p class="profile-subtitle" id="profile-rank-subtitle">Ready for the next round?</p>
+            </div>
+        </div>
+
+        <div class="boss-selector-zone">
+            <span class="selector-title" id="txt-select-enemy">SELECT ENEMY MODULE:</span>
+            <div class="boss-btn-group">
+                <button class="boss-mode-btn active" id="mode-classic" data-mode="classic">🤖 Classic AI</button>
+                <button class="boss-mode-btn" id="mode-tactician" data-mode="tactician">🧠 Tactician</button>
+                <button class="boss-mode-btn" id="mode-chaos" data-mode="chaos">🔥 Chaos Boss</button>
+            </div>
+        </div>
+        
+        <h1 class="game-title">Rock Paper Scissors Spock Lizard</h1>
+        <div id="game-subtitle" class="game-subtitle mode-classic-sub">[ CLASSIC SYSTEM ACTIVE ]</div>
+        
+        <div class="scoreboard-wrapper">
+            <div class="scoreboard-neon-grid">
+                <div class="score-card player-deck">
+                    <span class="faction-label player-faction-label" id="scoreboard-player-label">PLAYER</span>
+                    <div class="score-number" id="player-score">0</div>
+                </div>
+
+                <div class="vs-divider">VS</div>
+
+                <div class="score-card computer-deck">
+                    <span class="faction-label cpu-faction-label" id="scoreboard-cpu-label">COMPUTER</span>
+                    <div class="score-number" id="cpu-score">0</div>
+                </div>
+            </div>
+
+            <div class="streak-badge-row">
+                <div class="streak-pill current-pill" id="current-streak-pill">
+                    <span class="pill-title" id="txt-current-streak">CURRENT STREAK</span>
+                    <span class="pill-value" id="current-streak">0</span>
+                    <span class="pill-fire">🔥</span>
+                </div>
+                <div class="streak-pill highest-pill">
+                    <span class="pill-title" id="txt-best-record">BEST RECORD</span>
+                    <span class="pill-value" id="high-streak">0</span>
+                    <span class="pill-crown">👑</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="display-choices">
+            <div class="choice-box player-pod" id="player-pod-card">
+                <p id="player-choice-label">PLAYER CHOSE</p>
+                <div id="player-emoji" class="emoji-display">❓</div>
+                <div class="move-badge" id="player-choice">-</div>
+            </div>
+            
+            <div class="choice-box computer-pod" id="computer-pod-card">
+                <p id="computer-choice-label">COMPUTER CHOSE</p>
+                <div id="cpu-emoji" class="emoji-display">❓</div>
+                <div class="move-badge" id="cpu-choice">-</div>
+            </div>
+        </div>
+
+        <div class="result-message">
+            <h2 id="action-message">Make your move!</h2>
+        </div>
+
+        <div class="choices-buttons">
+            <button class="btn" data-choice="rock" id="btn-rock">🪨 Rock</button>
+            <button class="btn" data-choice="paper" id="btn-paper">📄 Paper</button>
+            <button class="btn" data-choice="scissors" id="btn-scissors">✂️ Scissors</button>
+            <button class="btn" data-choice="lizard" id="btn-lizard">🦎 Lizard</button>
+            <button class="btn" data-choice="spock" id="btn-spock">🖖 Spock</button>
+        </div>
+
+        <div class="stats-dashboard-panel">
+            <span class="dashboard-title" id="txt-stats-title">LIFETIME MATRIX PROFILE</span>
+            <div class="stats-grid">
+                <div class="stat-node"><span class="s-val" id="stat-played">0</span><span class="s-lbl" id="lbl-played">Played</span></div>
+                <div class="stat-node"><span class="s-val" id="stat-wins">0</span><span class="s-lbl" id="lbl-wins">Wins</span></div>
+                <div class="stat-node"><span class="s-val" id="stat-losses">0</span><span class="s-lbl" id="lbl-losses">Losses</span></div>
+                <div class="stat-node"><span class="s-val" id="stat-ratio">0%</span><span class="s-lbl" id="lbl-ratio">Win Rate</span></div>
+            </div>
+        </div>
+
+        <div class="achievements-shelf">
+            <span class="shelf-title" id="txt-achieve-title">SYSTEM MILESTONES Unlocked</span>
+            <div class="badges-tray">
+                <div class="achievement-badge locked" id="ach-first" title="Win your first match round!">🩸 <span id="lbl-ach-first">First Blood</span></div>
+                <div class="achievement-badge locked" id="ach-streak" title="Reach a 3-win hot streak!">⚡ <span id="lbl-ach-streak">Trifecta</span></div>
+                <div class="achievement-badge locked" id="ach-titan" title="Defeat the Chaos Boss module!">⚔️ <span id="lbl-ach-titan">Titan Slayer</span></div>
+            </div>
+        </div>
+
+        <div class="history-tape-container">
+            <span class="tape-label" id="txt-recent-log">RECENT MATCH LOG:</span>
+            <div class="tape-badges-row" id="history-tape">
+                <span class="history-badge badge-empty" id="txt-empty-log">EMPTY</span>
+            </div>
+        </div>
+        
+        <div class="control-footer-row">
+            <button id="reset-btn">Reset Game</button>
+            <button id="open-rules-btn" class="rules-toggle-link">📜 View Game Rules</button>
+        </div>
+
+        <!-- System Arcade Developer Signature Badge -->
+        <div class="arcade-credit-footer" id="arcade-credit">
+            <span class="credit-tag">MATRIX ARCHITECT:</span> <span class="credit-name">Hou55am &copy; 2026</span>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="rules-modal">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3 id="txt-modal-title">System Battle Matrix</h3>
+                <button class="modal-close-x" id="close-rules-btn">&times;</button>
+            </div>
+            <div class="cheat-sheet">
+                <div class="rules-row" id="modal-matrix-row">
+                    <div class="matrix-card">
+                        <div class="card-hero">🪨</div>
+                        <div class="card-label" id="lbl-rock">Rock</div>
+                        <div class="defeats-text class-beats">Beats:</div>
+                        <div class="target-badges">
+                            <span class="t-badge">✂️</span>
+                            <span class="t-badge">🦎</span>
+                        </div>
+                    </div>
+                    <div class="matrix-card">
+                        <div class="card-hero">📄</div>
+                        <div class="card-label" id="lbl-paper">Paper</div>
+                        <div class="defeats-text class-beats">Beats:</div>
+                        <div class="target-badges">
+                            <span class="t-badge">🪨</span>
+                            <span class="t-badge">🖖</span>
+                        </div>
+                    </div>
+                    <div class="matrix-card">
+                        <div class="card-hero">✂️</div>
+                        <div class="card-label" id="lbl-scissors">Scissors</div>
+                        <div class="defeats-text class-beats">Beats:</div>
+                        <div class="target-badges">
+                            <span class="t-badge">📄</span>
+                            <span class="t-badge">🦎</span>
+                        </div>
+                    </div>
+                    <div class="matrix-card">
+                        <div class="card-hero">🦎</div>
+                        <div class="card-label" id="lbl-lizard">Lizard</div>
+                        <div class="defeats-text class-beats">Beats:</div>
+                        <div class="target-badges">
+                            <span class="t-badge">🖖</span>
+                            <span class="t-badge">📄</span>
+                        </div>
+                    </div>
+                    <div class="matrix-card">
+                        <div class="card-hero">🖖</div>
+                        <div class="card-label" id="lbl-spock">Spock</div>
+                        <div class="defeats-text class-beats">Beats:</div>
+                        <div class="target-badges">
+                            <span class="t-badge">✂️</span>
+                            <span class="t-badge">🪨</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
