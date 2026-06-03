@@ -2,7 +2,7 @@
 
 A highly responsive, feature-packed retro-futuristic implementation of the classic extended game engine. Built entirely using clean, semantic modular frontend technologies.
 
-🌐 **[Live Demo Interactive Link](PASTE_YOUR_GITHUB_PAGES_LIVE_LINK_HERE)**
+🌐 **[Live Demo Interactive Link](https://houssaaaam.github.io/rock-paper-scissors-arcade/)**
 
 ---
 
